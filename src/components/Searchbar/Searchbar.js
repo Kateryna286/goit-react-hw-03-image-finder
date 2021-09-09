@@ -14,8 +14,12 @@ export class Searchbar extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    this.props.onSubmit(this.state);
+    if (this.state.keyWord.trim() === '') {
+      alert('Введите ключевое слово');
+      return;
+    }
 
+    this.props.onSubmit(this.state.keyWord);
     this.resetForm();
   };
 
