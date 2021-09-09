@@ -6,11 +6,30 @@ export class Searchbar extends Component {
     keyWord: '',
   };
 
+  handleChange = event => {
+    const { name, value } = event.currentTarget;
+    this.setState({ [name]: value });
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+
+    this.props.onSubmit(this.state);
+
+    this.resetForm();
+  };
+
+  resetForm = () => {
+    this.setState({
+      keyWord: '',
+    });
+  };
+
   render() {
     return (
       <>
         <header className="Searchbar">
-          <form className="SearchForm">
+          <form onSubmit={this.handleSubmit} className="SearchForm">
             <button type="submit" className="SearchForm-button">
               <span className="SearchForm-button-label">Search</span>
             </button>
@@ -21,6 +40,9 @@ export class Searchbar extends Component {
               autoComplete="off"
               autoFocus
               placeholder="Search images and photos"
+              name="keyWord"
+              value={this.state.keyWord}
+              onChange={this.handleChange}
             />
           </form>
         </header>

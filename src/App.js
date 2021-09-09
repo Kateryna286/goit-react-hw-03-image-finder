@@ -9,6 +9,7 @@ export default class App extends Component {
   state = {
     images: [],
     loading: false,
+    keyWord: '',
   };
 
   componentDidMount() {
@@ -24,10 +25,17 @@ export default class App extends Component {
     }, 1000);
   }
 
+  formSubmitHandler = data => {
+    console.log(data);
+    const keyWord = data.keyWord;
+    console.log(keyWord);
+    this.setState({ keyWord: keyWord });
+  };
+
   render() {
     return (
       <div className="App">
-        <Searchbar />
+        <Searchbar onSubmit={this.formSubmitHandler} />
         {this.state.loading && (
           <Loader type="Oval" color="#00BFFF" height={80} width={80} />
         )}
