@@ -9,7 +9,8 @@ class ImageGalleryItem extends Component {
   };
 
   getId = event => {
-    console.log(event.currentTarget.id);
+    const Id = event.currentTarget.id;
+    this.props.onClick(Id);
   };
 
   render() {

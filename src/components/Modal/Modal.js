@@ -1,7 +1,7 @@
 import React from 'react';
 import './Modal.css';
 
-function Modal(src, alt) {
+function Modal({ src, alt }) {
   return (
     <div className="Overlay">
       <div className="Modal">
