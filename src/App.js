@@ -5,6 +5,7 @@ import Searchbar from './components/Searchbar/Searchbar';
 import ImageGallery from './components/ImageGallery/ImageGallery';
 import './App.css';
 import Button from './components/Button/Button';
+import Modal from './components/Modal/Modal';
 
 export default class App extends Component {
   state = {
@@ -12,6 +13,7 @@ export default class App extends Component {
     loading: false,
     keyWord: '',
     page: 1,
+    showModal: false,
   };
 
   componentDidMount() {}
@@ -36,6 +38,11 @@ export default class App extends Component {
           .finally(() => this.setState({ loading: false }));
       }, 1000);
     }
+
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
   }
 
   formSubmitHandler = data => {
@@ -45,6 +52,12 @@ export default class App extends Component {
   hundleButtonClick = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
+    }));
+  };
+
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
     }));
   };
 
@@ -59,6 +72,7 @@ export default class App extends Component {
         {this.state.images.length > 0 && (
           <Button onClick={this.hundleButtonClick} />
         )}
+        {this.state.showModal && <Modal />}
       </div>
     );
   }
