@@ -1,14 +1,36 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './Modal.css';
 
-function Modal({ src, alt }) {
-  return (
-    <div className="Overlay">
-      <div className="Modal">
-        <img src={src} alt={alt} />
-      </div>
-    </div>
-  );
-}
+export default class Modal extends Component {
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyDown);
+  }
 
-export default Modal;
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  handleKeyDown = e => {
+    if (e.code === 'Escape') {
+      console.log('Нажали ESC, нужно закрыть модалку');
+
+      this.props.onClose();
+    }
+  };
+
+  handleBackdropClick = event => {
+    if (event.currentTarget === event.target) {
+      this.props.onClose();
+    }
+  };
+
+  render() {
+    return (
+      <div className="Overlay" onClick={this.handleBackdropClick}>
+        <div className="Modal">
+          <img src={this.props.src} alt={this.props.alt} />
+        </div>
+      </div>
+    );
+  }
+}

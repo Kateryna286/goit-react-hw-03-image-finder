@@ -15,10 +15,6 @@ export default class ImageGallery extends Component {
     showModal: false,
   };
 
-  static defaultProps = {
-    keyWord: '',
-  };
-
   componentDidUpdate(prevProps, prevState) {
     if (
       prevProps.keyWord !== this.props.keyWord ||
@@ -94,7 +90,7 @@ export default class ImageGallery extends Component {
         )}
         {this.state.showModal && (
           <Modal
-            onClick={this.toggleModal}
+            onClose={this.toggleModal}
             src={imgById.largeImageURL}
             alt={imgById.id}
           />
@@ -103,22 +99,3 @@ export default class ImageGallery extends Component {
     );
   }
 }
-
-// function ImageGallery({ images}) {
-//   return (
-//     <div>
-//       <ul className="ImageGallery">
-//         {images.map(image => (
-//           <ImageGalleryItem
-//             src={image.webformatURL}
-//             alt={image.user}
-//             key={image.id}
-//             id={image.id}
-//           />
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// }
-
-// export default ImageGallery;
