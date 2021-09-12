@@ -3,7 +3,6 @@ import './ImageGalleryItem.css';
 
 class ImageGalleryItem extends Component {
   static defaultProps = {
-    onClick: '',
     src: '',
     alt: '',
     id: '',
