@@ -10,3 +10,5 @@ function Button({ onClick }) {
 }
 
 export default Button;
+
+//||  prevState.page !== this.state.page

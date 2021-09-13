@@ -16,12 +16,26 @@ export default class ImageGallery extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (
-      prevProps.keyWord !== this.props.keyWord ||
-      prevState.page !== this.state.page
-    ) {
-      this.setState({ loading: true });
+    if (prevProps.keyWord !== this.props.keyWord) {
+      this.setState({
+        images: [],
+        loading: true,
+        page: 1,
+      });
 
+      setTimeout(() => {
+        axios
+          .get(
+            `https://pixabay.com/api/?q=${this.props.keyWord}&page=${this.state.page}&key=22564694-3177f5daba1f2572eee652a36&image_type=photo&orientation=horizontal&per_page=12`,
+          )
+          .then(response =>
+            this.setState({
+              images: [...response.data.hits],
+            }),
+          )
+          .finally(() => this.setState({ loading: false }));
+      }, 1000);
+    } else if (prevState.page !== this.state.page) {
       setTimeout(() => {
         axios
           .get(
@@ -82,6 +96,7 @@ export default class ImageGallery extends Component {
             />
           ))}
         </ul>
+
         {this.state.loading && (
           <Loader type="Oval" color="#00BFFF" height={80} width={80} />
         )}
