@@ -12,8 +12,6 @@ export default class Modal extends Component {
 
   handleKeyDown = e => {
     if (e.code === 'Escape') {
-      console.log('Нажали ESC, нужно закрыть модалку');
-
       this.props.onClose();
     }
   };
@@ -25,10 +23,11 @@ export default class Modal extends Component {
   };
 
   render() {
+    const { src, alt } = this.props;
     return (
       <div className="Overlay" onClick={this.handleBackdropClick}>
         <div className="Modal">
-          <img src={this.props.src} alt={this.props.alt} />
+          <img src={src} alt={alt} />
         </div>
       </div>
     );

@@ -3,18 +3,15 @@ import './ImageGalleryItem.css';
 
 class ImageGalleryItem extends Component {
   getId = event => {
-    const Id = event.currentTarget.id;
-    this.props.onClick(Id);
+    const id = +event.currentTarget.id;
+    this.props.onClick(id);
   };
 
   render() {
+    const { id, src, alt } = this.props;
     return (
-      <li id={this.props.id} className="ImageGalleryItem" onClick={this.getId}>
-        <img
-          src={this.props.src}
-          alt={this.props.alt}
-          className="ImageGalleryItem-image"
-        />
+      <li id={id} className="ImageGalleryItem" onClick={this.getId}>
+        <img src={src} alt={alt} className="ImageGalleryItem-image" />
       </li>
     );
   }
