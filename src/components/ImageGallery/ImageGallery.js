@@ -13,6 +13,7 @@ export default class ImageGallery extends Component {
     id: null,
     showModal: false,
     error: null,
+    showButton: false,
     status: 'idle',
   };
 
@@ -38,10 +39,19 @@ export default class ImageGallery extends Component {
               error: `Картинок по поиску '${keyWord}' не обнаружено`,
             });
           } else {
-            this.setState({
-              images: [...response.data.hits],
-              status: 'resolved',
-            });
+            if (response.data.total > 12) {
+              this.setState({
+                images: [...response.data.hits],
+                status: 'resolved',
+                showButton: true,
+              });
+            } else {
+              this.setState({
+                images: [...response.data.hits],
+                status: 'resolved',
+                showButton: false,
+              });
+            }
           }
         })
         .then(this.smoothScroll)
@@ -64,6 +74,7 @@ export default class ImageGallery extends Component {
           this.setState({
             images: [...prevState.images, ...response.data.hits],
             status: 'resolved',
+            // showButton: true,
           }),
         )
         .then(this.smoothScroll)
@@ -106,7 +117,7 @@ export default class ImageGallery extends Component {
 
   render() {
     const imgById = this.getInfoById();
-    const { images, status, page, showModal } = this.state;
+    const { images, status, showModal, showButton } = this.state;
 
     if (status === 'idle') {
       return <div>Введите ключевое слово</div>;
@@ -131,9 +142,7 @@ export default class ImageGallery extends Component {
             ))}
           </ul>
 
-          {(page > 1 || images !== null) && (
-            <Button onClick={this.hundleButtonClick} />
-          )}
+          {showButton && <Button onClick={this.hundleButtonClick} />}
           {showModal && (
             <Modal
               onClose={this.toggleModal}
