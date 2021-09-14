@@ -74,7 +74,6 @@ export default class ImageGallery extends Component {
           this.setState({
             images: [...prevState.images, ...response.data.hits],
             status: 'resolved',
-            // showButton: true,
           }),
         )
         .then(this.smoothScroll)
