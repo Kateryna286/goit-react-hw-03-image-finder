@@ -14,6 +14,7 @@ export default class ImageGallery extends Component {
     showModal: false,
     error: null,
     showButton: false,
+    loading: false,
     status: 'idle',
   };
 
@@ -25,9 +26,9 @@ export default class ImageGallery extends Component {
       this.setState({
         images: null,
         page: 1,
+        loading: true,
         status: 'pending',
       });
-
       axios
         .get(
           `https://pixabay.com/api/?q=${keyWord}&page=${page}&key=22564694-3177f5daba1f2572eee652a36&image_type=photo&orientation=horizontal&per_page=12`,
@@ -37,25 +38,28 @@ export default class ImageGallery extends Component {
             this.setState({
               status: 'rejected',
               error: `Картинок по поиску '${keyWord}' не обнаружено`,
+              loading: false,
+              showButton: false,
             });
           } else {
             if (response.data.total > 12) {
               this.setState({
                 images: [...response.data.hits],
-                status: 'resolved',
+
                 showButton: true,
+                loading: false,
               });
             } else {
               this.setState({
                 images: [...response.data.hits],
-                status: 'resolved',
+
                 showButton: false,
+                loading: false,
               });
             }
           }
         })
-        .then(this.smoothScroll)
-        .catch(error => this.setState({ error: 'error', status: 'rejected' }));
+        .then(this.smoothScroll);
     }
 
     if (
@@ -64,7 +68,7 @@ export default class ImageGallery extends Component {
       prevProps.keyWord === keyWord
     ) {
       this.setState({
-        status: 'pending',
+        loading: true,
       });
       axios
         .get(
@@ -73,11 +77,11 @@ export default class ImageGallery extends Component {
         .then(response =>
           this.setState({
             images: [...prevState.images, ...response.data.hits],
-            status: 'resolved',
+
+            loading: false,
           }),
         )
-        .then(this.smoothScroll)
-        .catch(error => this.setState({ error: 'error', status: 'rejected' }));
+        .then(this.smoothScroll);
     }
   }
 
@@ -116,19 +120,13 @@ export default class ImageGallery extends Component {
 
   render() {
     const imgById = this.getInfoById();
-    const { images, status, showModal, showButton } = this.state;
+    const { images, showModal, status, showButton, error } = this.state;
 
-    if (status === 'idle') {
-      return <div>Введите ключевое слово</div>;
-    }
-
-    if (status === 'pending') {
-      return <Loader type="Oval" color="#00BFFF" height={80} width={80} />;
-    }
-
-    if (status === 'resolved') {
-      return (
-        <div>
+    return (
+      <div>
+        {status === 'idle' && <div>Начните поиск</div>}
+        {status === 'rejected' && <div>{error}</div>}
+        {images && (
           <ul className="ImageGallery">
             {images.map(image => (
               <ImageGalleryItem
@@ -140,21 +138,19 @@ export default class ImageGallery extends Component {
               />
             ))}
           </ul>
-
-          {showButton && <Button onClick={this.hundleButtonClick} />}
-          {showModal && (
-            <Modal
-              onClose={this.toggleModal}
-              src={imgById.largeImageURL}
-              alt={imgById.id}
-            />
-          )}
-        </div>
-      );
-    }
-
-    if (status === 'rejected') {
-      return <div>{this.state.error}</div>;
-    }
+        )}
+        {this.state.loading && (
+          <Loader type="Oval" color="#00BFFF" height={80} width={80} />
+        )}
+        {showButton && <Button onClick={this.hundleButtonClick} />}
+        {showModal && (
+          <Modal
+            onClose={this.toggleModal}
+            src={imgById.largeImageURL}
+            alt={imgById.id}
+          />
+        )}
+      </div>
+    );
   }
 }
