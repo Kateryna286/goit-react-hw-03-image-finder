@@ -58,8 +58,7 @@ export default class ImageGallery extends Component {
               });
             }
           }
-        })
-        .then(this.smoothScroll);
+        });
     }
 
     if (
